@@ -17,6 +17,18 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   moveit_planners_ompl
   elion_planner
+  std_msgs
+  message_generation
+)
+
+add_service_files(
+  FILES
+  elionpy.srv
+)
+generate_messages(
+  DEPENDENCIES
+  std_msgs
+  moveit_msgs
 )
 
 catkin_package(
@@ -66,3 +78,9 @@ target_link_libraries(elion_run_example
 add_executable(elion_visualize_ompl_constraints src/visualize_ompl_constraints.cpp)
 target_link_libraries(elion_visualize_ompl_constraints ${catkin_LIBRARIES})
 set_target_properties(elion_visualize_ompl_constraints PROPERTIES OUTPUT_NAME "visualize_ompl_constraints")
+
+
+add_executable(elionpy src/elionpy.cpp)
+add_dependencies( elionpy ${PROJECT_NAME}_generate_messages_cpp )
+add_dependencies(elionpy ${catkin_EXPORTED_TARGETS})
+target_link_libraries(elionpy ${catkin_LIBRARIES} ${PROJECT_NAME}_util jsoncpp_lib)

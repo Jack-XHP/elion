@@ -84,6 +84,14 @@ void showPositionConstraints(moveit_msgs::PositionConstraint pos_con, moveit_vis
   mvt.trigger();
 }
 
+void showCollsion(moveit_msgs::CollisionObject object, moveit_visual_tools::MoveItVisualTools& mvt)
+{ 
+  auto dims = object.primitives.at(0).dimensions;
+  mvt.publishCuboid(object.primitive_poses.at(0), dims.at(0), dims.at(1), dims.at(2),
+                    rviz_visual_tools::TRANSLUCENT_DARK);
+  mvt.trigger();
+}
+
 void displaySolution(planning_interface::MotionPlanResponse res, const robot_state::JointModelGroup* joint_model_group,
                      moveit_visual_tools::MoveItVisualTools& mvt, bool withOrientation)
 {

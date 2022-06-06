@@ -32,6 +32,7 @@ public:
 };
 
 void showPositionConstraints(moveit_msgs::PositionConstraint pos_con, moveit_visual_tools::MoveItVisualTools& mvt);
+void showCollsion(moveit_msgs::CollisionObject object, moveit_visual_tools::MoveItVisualTools& mvt);
 void displaySolution(planning_interface::MotionPlanResponse res, const robot_state::JointModelGroup* joint_model_group,
                      moveit_visual_tools::MoveItVisualTools& mvt, bool withOrientation);
 

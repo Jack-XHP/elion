@@ -110,6 +110,8 @@ int main(int argc, char** argv)
   elion::loadPlanningPlugin(planner_plugin_loader, planner_instance, robot_model, node_handle, BASE_CLASS,
                             planning_plugin_name);
 
+
+
   // Use the default planning scene published by the move group node.
   moveit::planning_interface::PlanningSceneInterface planning_scene_interface;
   auto psm = std::make_shared<planning_scene_monitor::PlanningSceneMonitor>(robot_description);
@@ -117,6 +119,7 @@ int main(int argc, char** argv)
   ROS_INFO_STREAM("Request planning scene " << (has_planning_scene ? "succeeded." : "failed."));
   psm->startSceneMonitor("/move_group/monitored_planning_scene");
 
+ 
   // Visualization
   // ^^^^^^^^^^^^^
   namespace rvt = rviz_visual_tools;
@@ -137,6 +140,11 @@ int main(int argc, char** argv)
   elion::readAndAddObstacles(root["collision_objects"], planning_scene_interface, fixed_frame);
 
   psm->getPlanningScene()->printKnownObjects();
+  auto CO = planning_scene_interface.getObjects();
+  for (auto const& x : CO){
+    ROS_INFO_STREAM("Visualized object" << x.first);
+    elion::showCollsion(x.second,visual_tools);
+  }
 
   // Create the planning request
   // ^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -206,12 +214,13 @@ int main(int argc, char** argv)
       moveit_msgs::DisplayTrajectory display_trajectory;
       moveit_msgs::MotionPlanResponse response;
       res1.getMessage(response);
+      //ROS_INFO_STREAM("trajectory joint state" << response.trajectory);
       display_trajectory.trajectory_start = response.trajectory_start;
       display_trajectory.trajectory.push_back(response.trajectory);
       display_publisher.publish(display_trajectory);
     }
 
-    const std::string output_file{ root.get("output_file", "/home/jeroen/ros/elion_ws/data/default.csv").asString() };
+    const std::string output_file{ root.get("output_file", "./plan.csv").asString() };
     writeResultToFile(output_file, res1, run);
 
     ROS_INFO_STREAM("Writing results to: " << output_file);

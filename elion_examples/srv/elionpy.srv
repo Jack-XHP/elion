@@ -1,0 +1,5 @@
+moveit_msgs/MotionPlanRequest request
+moveit_msgs/RobotState goal
+moveit_msgs/CollisionObject[] collisions
+---
+moveit_msgs/MotionPlanResponse trajectory
